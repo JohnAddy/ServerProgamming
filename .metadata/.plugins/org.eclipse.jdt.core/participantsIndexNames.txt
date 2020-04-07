@@ -1,0 +1,5 @@
+INDEX VERSION 1.131
+D:\www\site\ServerProject\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\1703485930.index
+\vaalikones\src\main\java
+D:\www\site\ServerProject\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\1339937102.index
+\vaalikones\src\main\java

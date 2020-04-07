@@ -1,0 +1,30 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+
+<h1>Insert Candidate Names</h1>
+
+ <form action="Vaalikone" id="insertcrud">
+
+ehdokasId 		:	<input type="text">
+sukunimi 		: 	<input type="text">
+etunimi			:	<input type="text">
+puolue			:	<input type="text">
+kotipaikkakunta	:	<input type="text">
+ika				:	<input type="Integer">
+miksiEduskuntaan:	<input type="text">
+mitaAsioitaHaluatEdistaa:<input type="text">
+ammatti			:	<input type="text">
+
+</form>
+
+
+</body>
+</html>
+
