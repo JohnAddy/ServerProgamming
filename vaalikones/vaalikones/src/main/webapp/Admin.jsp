@@ -1,3 +1,39 @@
+<%@page import="persist.Ehdokkaat"%>
+<%@page import="java.util.List"%>
+<%@page import="javax.persistence.Query"%>
+<%@page import="javax.persistence.EntityManager"%>
+<%@page import="javax.persistence.Persistence"%>
+<%@page import ="javax.persistence.PersistenceContext"%>
+<%@page import="javax.persistence.EntityManagerFactory"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page session="true"%>
+
+<% Object error = request.getAttribute("viesti");%>
+
+<%
+    if (session.getAttribute("admin") != "admin") {
+        request.getRequestDispatcher("LogAdm.jsp")
+                .forward(request, response);
+    }
+   /* EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
+    EntityManager em = emf.createEntityManager();*/
+    EntityManagerFactory emf=null;
+    EntityManager em = null;
+    try {
+	      emf=Persistence.createEntityManagerFactory("vaalikones");
+	      em = emf.createEntityManager();
+    }
+    catch(Exception e) {
+      	response.getWriter().println("EMF+EM EI Onnistu");
+
+      	e.printStackTrace(response.getWriter());
+
+      	return;
+    }
+    Query qE = em.createQuery(
+            "SELECT e FROM Ehdokkaat e ORDER BY e.ehdokasId");
+    List<Ehdokkaat> ehdokasList = qE.getResultList();
+%>
 
 <!DOCTYPE html>
 <html>
@@ -13,7 +49,7 @@
 <body>
 	
 		<h3><a href="Create.jsp">Add & Delete Candidate</a></h3>
-		 
+
 		<p>List of Existing Candidate:</p>
 		<table>
 		
@@ -56,10 +92,7 @@
 				<%}%> 
 			</tbody>
 			</table>
-			
-		
-		
-		
+
 		
 		<h3><a href="View.jsp">ViewList</a></h3>
 
