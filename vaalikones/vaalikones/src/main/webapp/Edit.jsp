@@ -10,6 +10,26 @@
 <%@page session="true"%>
 
 
+<%
+        //ViewPage view = new ViewPage();
+        String candidateID = request.getParameter("user");
+        Integer candidatee = Integer.parseInt(candidateID);
+
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction transaction = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("vaalikones");
+            em = emf.createEntityManager();
+            transaction = em.getTransaction();
+            transaction.begin();
+        } catch (Exception e) {
+            response.getWriter().println("EMF+EM EI Onnistu");
+
+            e.printStackTrace(response.getWriter());
+
+            return;
+        }
 
 
 <!DOCTYPE html>
