@@ -35,7 +35,7 @@ import persist.Vastaukset;
 /**
  * Vaalikone-servlet, vastaa vaalikoneen varsinaisesta toiminnallisuudesta
  *
- * @author Johnny
+ * @author Jonne
  */
 public class Vaalikone extends HttpServlet {
 
@@ -256,6 +256,7 @@ public class Vaalikone extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+    
     }
 
     /**
@@ -281,5 +282,8 @@ public class Vaalikone extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+    
+    
+    
 
 }

@@ -13,10 +13,20 @@
     <servlet-class>vaalikone.Vaalikone</servlet-class>
   </servlet>
   
+  <servlet>
+        <servlet-name>CheckAdmin</servlet-name>
+        <servlet-class>vaalikone.CheckAdmin</servlet-class>
+    </servlet>
+  
   <servlet-mapping>
     <servlet-name>Vaalikone</servlet-name>
     <url-pattern>/Vaalikone</url-pattern>
   </servlet-mapping>
+  
+  <servlet-mapping>
+        <servlet-name>CheckAdmin</servlet-name>
+        <url-pattern>/CheckAdmin</url-pattern>
+    </servlet-mapping>
   <session-config>
     <session-timeout>30</session-timeout>
   </session-config>
