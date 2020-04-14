@@ -1,30 +1,37 @@
-<%@page import="persist.Ehdokkaat"%>
-<%@page import="javax.persistence.*"%>
+<%@page import="javax.persistence.Query"%>
+<%@page import="javax.persistence.EntityManager"%>
+<%@page import="javax.persistence.EntityManagerFactory"%>
 <%@page import="java.util.List"%>
+<%@page import="javax.persistence.Persistence"%>
+<%@page import ="javax.persistence.PersistenceContext"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="persist.Ehdokkaat" %>
+<%@page import="javax.persistence.EntityTransaction" %>
 <%@page session="true"%>
-
-
 <%
-        //ViewPage view = new ViewPage();
-        String candidateID = request.getParameter("user");
-        Integer candidatee = Integer.parseInt(candidateID);
 
-        EntityManagerFactory emf = null;
-        EntityManager em = null;
-        EntityTransaction transaction = null;
-        try {
-            emf = Persistence.createEntityManagerFactory("vaalikones");
-            em = emf.createEntityManager();
-            transaction = em.getTransaction();
-            transaction.begin();
-        } catch (Exception e) {
-            response.getWriter().println("EMF+EM This is an error");
 
-            e.printStackTrace(response.getWriter());
+    String candidateID = request.getParameter("user");
 
-            return;
-        }
+    Integer candidatee = Integer.parseInt(candidateID);
+
+
+    EntityManagerFactory emf = null;
+    EntityManager em = null;
+    EntityTransaction transaction = null;
+    try {
+        emf = Persistence.createEntityManagerFactory("vaalikones");
+        em = emf.createEntityManager();
+        transaction = em.getTransaction();
+        transaction.begin();
+    } catch (Exception e) {
+        response.getWriter().println("EMF+EM EI Onnistu");
+
+        e.printStackTrace(response.getWriter());
+
+        return;
+    }
+
     Query qE = em.createQuery(
 
             "SELECT e FROM Ehdokkaat e WHERE e.ehdokasId = :Ehdos").setParameter("Ehdos", candidatee);
@@ -54,6 +61,48 @@
     <input type="submit" name="update" value="update" /><button><a href="CheckAdmin">Cancel</a></button><br>
 
 </form><br>
+
+<%
+    if (request.getParameter("update") != null) {
+        try {
+            //Retrieve the values set for the candidate from the text fields
+            String id = request.getParameter("updateid");
+
+            int i = Integer.parseInt(id);
+            String etunimi = request.getParameter("etunimi");
+            String sukunimi = request.getParameter("sukunimi");
+            String puolue = request.getParameter("puolue");
+            String paikka = request.getParameter("paikkakunta");
+            String ika = request.getParameter("ika");
+            int ik = Integer.parseInt(ika);
+            String miksi = request.getParameter("miksi");
+            String mita = request.getParameter("mita");
+            String ammatti = request.getParameter("ammatti");
+
+            one.setEtunimi(etunimi);
+            one.setSukunimi(sukunimi);
+            one.setPuolue(puolue);
+            one.setKotipaikkakunta(paikka);
+            one.setIka(ik);
+            one.setMiksiEduskuntaan(miksi);
+            one.setMitaAsioitaHaluatEdistaa(mita);
+            one.setAmmatti(ammatti);
+
+            Ehdokkaat e = em.find(Ehdokkaat.class, i);
+
+            em.getTransaction().begin();
+            e.setEhdokasId(candidatee);
+            em.merge(e);
+            em.getTransaction().commit();
+            em.close();
+            response.setHeader("Refresh", "0; http://localhost:8080/vaalikone/Edit.jsp");
+            response.getWriter().print("Record Updated");
+            //response.sendRedirect("Admin.jsp");
+        } catch (Exception e) {
+%> Something went wrong, check id.<%          }
+}
+%>
+
 
 
 </body>
