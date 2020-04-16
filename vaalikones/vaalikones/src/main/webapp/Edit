@@ -31,3 +31,57 @@ try {
 
 	return;
 }
+
+// System.out.println(one.getEtunimi());
+%>
+
+
+
+ <%
+            if (request.getParameter("update") != null) {
+                try {
+                    //Retrieve the values set for the candidate from the text fields
+                    String id = request.getParameter("user");
+
+                   	int i = Integer.parseInt(id);
+                    String etunimi = request.getParameter("etunimi");
+                    String sukunimi = request.getParameter("sukunimi");
+                    String puolue = request.getParameter("puolue");
+                    String paikka = request.getParameter("paikkakunta");
+                    String ika = request.getParameter("ika");
+                    int ik = Integer.parseInt(ika);
+                    String miksi = request.getParameter("miksi");
+                    String mita = request.getParameter("mita");
+                    String ammatti = request.getParameter("ammatti");
+
+ EntityManager as = emf.createEntityManager();
+                    EntityTransaction trans = as.getTransaction();
+
+
+                   	Ehdokkaat eh = as.find(Ehdokkaat.class, i);
+                   //	response.getWriter().println(eh.getEtunimi());
+                   	if(eh != null){
+                   	 as.getTransaction().begin();
+                   	 eh.setEtunimi(etunimi);
+                     eh.setSukunimi(sukunimi);
+                     eh.setPuolue(puolue);
+                     eh.setKotipaikkakunta(paikka);
+                     eh.setIka(ik);
+                     eh.setMiksiEduskuntaan(miksi);
+                     eh.setMitaAsioitaHaluatEdistaa(mita);
+                     eh.setAmmatti(ammatti);
+
+
+                     // e.setEhdokasId(candidatee);
+                      as.getTransaction().commit();
+                      as.close();
+
+                   	}
+
+                   // response.setHeader("Refresh", "0; http://localhost:8080/vaalikone/Edit.jsp");
+                    //response.getWriter().print("Record Updated");
+                    response.sendRedirect("Admin.jsp");
+                } catch (Exception e) {
+                	System.out.println(e.getMessage());
+               }
+            }
