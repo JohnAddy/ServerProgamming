@@ -9,7 +9,7 @@
 <%@page import="javax.persistence.EntityTransaction" %>
 <%@page session="true"%>
 <% 
-	//ViewPage view = new ViewPage();
+	ViewPage view = new ViewPage();
 String candidateID = request.getParameter("user");
 Integer candidatee = Integer.parseInt(candidateID);
 
