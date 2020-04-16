@@ -50,10 +50,13 @@ Ehdokkaat one = kaikkiEhdokkaat.get(0);
 <title>Insert title here</title>
 </head>
 <body>
-<a href = "CheckAdmin">Back to list</a>
+<form id=vastausformi" action="Admin.jsp" method="GET">
+
+<input id="submit" type="submit" name="Back to list" value="Back to list">
+</form>
 <form>
                 <Strong>Update:</Strong><br>
-                Äänestysnumero:<br><input type="number" size ="3" name="id"/><br>
+                Äänestysnumero:<br><input readonly type="number" size ="3" name="id" value = "<%= one.getEhdokasId()%>"/><br>
                 Etunimi:<br><input readonly type="text" maxlength="200" size="70" name="etunimi" value ="<%= one.getEtunimi()%>"/><br>
                 Sukunimi:<br><input readonly type="text" maxlength="200" size="70" name="sukunimi" value ="<%= one.getSukunimi()%>"/><br>
                 Puolue:<br><input readonly type="text" maxlength="200" size="70" name="puolue" value ="<%= one.getPuolue()%>"/><br>
