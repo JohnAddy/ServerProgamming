@@ -15,7 +15,7 @@
         <tr><td ><b>User Name</b></td>
           <td>: <input  type="text" name="pid" id="pid">
         </td></tr>        
-        <tr><td colspan=2 ,align="center">
+        <tr><td "colspan=2"" align="center">
         <input  type="submit" name="submit" value="Search"></td></tr>
       </table>
     </form>
