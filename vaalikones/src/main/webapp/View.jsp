@@ -15,6 +15,7 @@
 	pageEncoding="ISO-8859-1"%>
 <%
 	//ViewPage view = new ViewPage();
+
 String candidateID = request.getParameter("user");
 Integer candidatee = Integer.parseInt(candidateID);
 
@@ -24,10 +25,11 @@ EntityTransaction transaction = null;
 try {
 	emf = Persistence.createEntityManagerFactory("vaalikones");
 	em = emf.createEntityManager();
-	transaction = em.getTransaction();
+/* 	transaction = em.getTransaction();
 	transaction.begin();
+	 em.close(); */
 } catch (Exception e) {
-	response.getWriter().println("EMF+EM EI Onnistu");
+	response.getWriter().println("EMF+EM Not Working");
 
 	e.printStackTrace(response.getWriter());
 
@@ -40,23 +42,27 @@ Query qE = em.createQuery(
 List<Ehdokkaat> kaikkiEhdokkaat = qE.getResultList();
 Ehdokkaat one = kaikkiEhdokkaat.get(0);
 // System.out.println(one.getEtunimi());
-%>
+ //response.getWriter().println(session.toString());
+ %>
 
 
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>View</title>
+<link href="style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-<form id=vastausformi" action="Admin.jsp" method="GET">
 
-<input id="submit" type="submit" name="Back to list" value="Back to list">
-</form>
-<form>
-                <Strong>Update:</Strong><br>
-                Äänestysnumero:<br><input readonly type="number" size ="3" name="id" value = "<%= one.getEhdokasId()%>"/><br>
+<div class= "editdiv">
+
+<form class="edit">
+
+<a class="backList" href = "/Admin.jsp">Back to list</a><br>
+
+                <br><Strong>View Information</Strong><br>
+                Äänestysnumero:<br><input type="number" size ="3" name="id"/><br>
                 Etunimi:<br><input readonly type="text" maxlength="200" size="70" name="etunimi" value ="<%= one.getEtunimi()%>"/><br>
                 Sukunimi:<br><input readonly type="text" maxlength="200" size="70" name="sukunimi" value ="<%= one.getSukunimi()%>"/><br>
                 Puolue:<br><input readonly type="text" maxlength="200" size="70" name="puolue" value ="<%= one.getPuolue()%>"/><br>
@@ -66,9 +72,9 @@ Ehdokkaat one = kaikkiEhdokkaat.get(0);
                 Mitä asioita haluat edistää?:<br><textarea readonly rows="5" cols="60"><%= one.getMitaAsioitaHaluatEdistaa()%></textarea><br>
                 Ammatti:<br><input readonly type="text" maxlength="200" size="70" name="ammatti" value ="<%= one.getAmmatti()%>"/><br>
                
-            </form><br>
+            </form>
 
-
+</div>
 
 
 </body>

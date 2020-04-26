@@ -4,44 +4,54 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-
+//@WebServlet("/CheckAdmin")
 public class CheckAdmin extends HttpServlet {
 
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
+
+	 public CheckAdmin() {
+	        super();
+	        // TODO Auto-generated constructor stub
+	    }
 
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
 
 		System.out.println(request);
+		
+		
 		final String Password = request.getParameter("Password");
 		final String User = request.getParameter("User");
 
-		if (crypt(Password).equals(crypt("admin")) && User.equals("admin")) {
+		if (crypt(Password).equals(crypt("login")) && User.equals("login")) {
 			HttpSession session = request.getSession();
-			session.setAttribute("admin", "admin");
-			request.getRequestDispatcher("Admin.jsp")
-			.forward(request, response);
+			session.setAttribute("login", "login");
+			session.setAttribute("limit-total", 0);
+			session.setAttribute("limitCached", 0);
+			/*request.getRequestDispatcher("Admin.jsp")
+			.forward(request, response);*/
+			response.sendRedirect("Admin.jsp");
 		} else {
-			String error;
-			error = "User or Password  is wrong!";
-			request.setAttribute("viesti", error);
-			request.getRequestDispatcher("LogAdm.jsp")
-			.forward(request, response);
+			String error = "User or Password  is wrong!";
+			request.setAttribute("messag", error);
+			/*request.getRequestDispatcher("LogAdm.jsp")
+			.forward(request, response);*/
+			response.sendRedirect("LogAdm.jsp");
 
 		}
 	}
 	public String crypt(String str) {
 		if (str == null || str.length() == 0) {
-			throw new IllegalArgumentException("String to encrypt cannot be null or zero length");
+			//throw new IllegalArgumentException("String to encrypt cannot be null or zero length");
+			return "";
 		}
 
 		MessageDigest digester;

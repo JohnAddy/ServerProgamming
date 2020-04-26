@@ -3,96 +3,145 @@
 <%@page import="javax.persistence.EntityManagerFactory"%>
 <%@page import="java.util.List"%>
 <%@page import="javax.persistence.Persistence"%>
-<%@page import ="javax.persistence.PersistenceContext"%>
+<%@page import="javax.persistence.PersistenceContext"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="persist.Ehdokkaat" %>
-<%@page import="javax.persistence.EntityTransaction" %>
+<%@page import="persist.Ehdokkaat"%>
+<%@page import="javax.persistence.EntityTransaction"%>
 <%@page session="true"%>
-<% 
+<%
+
 
 String candidateID = request.getParameter("user");
 Integer candidatee = Integer.parseInt(candidateID);
 
-EntityManagerFactory emf = Persistence.createEntityManagerFactory("vaalikones");
-EntityManager em = emf.createEntityManager();
+
+EntityManagerFactory emf = null;
+EntityManager em = null;
+EntityTransaction transaction = null;
+try {
+	emf = Persistence.createEntityManagerFactory("vaalikones");
+	em = emf.createEntityManager();
+	transaction = em.getTransaction();
+	transaction.begin();
+} catch (Exception e) {
+	response.getWriter().println("EMF+EM Not working");
+
+	e.printStackTrace(response.getWriter());
+
+	return;
+}
 
 
-
-Query qE = em.createQuery("SELECT e FROM Ehdokkaat e WHERE e.ehdokasId = :Ehdos").setParameter("Ehdos", candidatee);
-List<Ehdokkaat> kaikkiEhdokkaat = qE.getResultList();
-Ehdokkaat one = kaikkiEhdokkaat.get(0);
-
+// System.out.println(one.getEtunimi());
 %>
+
+
+
+<%
+            if (request.getParameter("update") != null) {
+                try {
+                    //Retrieve the values set for the candidate from the text fields
+                    String id = request.getParameter("user");
+                 
+                   	int i = Integer.parseInt(id);
+                    String etunimi = request.getParameter("etunimi");
+                    String sukunimi = request.getParameter("sukunimi");
+                    String puolue = request.getParameter("puolue");
+                    String paikka = request.getParameter("paikkakunta");
+                    String ika = request.getParameter("ika");
+                    int ik = Integer.parseInt(ika);
+                    String miksi = request.getParameter("miksi");
+                    String mita = request.getParameter("mita");
+                    String ammatti = request.getParameter("ammatti");
+                    
+                    EntityManager as = emf.createEntityManager();
+                    EntityTransaction trans = as.getTransaction();
+                    
+                    
+                   // Ehdokaat Ehdo
+                    //one.setEhdokasId(i);
+                   
+                    
+                   	Ehdokkaat eh = as.find(Ehdokkaat.class, i); 
+                   //	response.getWriter().println(eh.getEtunimi());
+                   	if(eh != null){
+                   	 as.getTransaction().begin();	
+                   	 eh.setEtunimi(etunimi);
+                     eh.setSukunimi(sukunimi);
+                     eh.setPuolue(puolue);
+                     eh.setKotipaikkakunta(paikka);
+                     eh.setIka(ik);
+                     eh.setMiksiEduskuntaan(miksi);
+                     eh.setMitaAsioitaHaluatEdistaa(mita);
+                     eh.setAmmatti(ammatti);
+                     
+                   
+                     // e.setEhdokasId(candidatee);
+                      as.persist(eh);
+                      as.flush();
+      				as.getTransaction().commit();
+                      as.close();
+                      
+                   	}
+                   	response.getWriter().print("Record Updated");
+                   	session.setAttribute("limit-total", 0);
+        			session.setAttribute("limitCached", 0);
+                   // response.setHeader("Refresh", "0; http://localhost:8080/vaalikone/Edit.jsp");
+                    //response.getWriter().print("Record Updated");
+                    response.sendRedirect("Admin.jsp");
+                } catch (Exception e) {
+                	System.out.println(e.getMessage());
+               }
+            }
+ 
+ Query qE = em.createQuery(
+			
+			"SELECT e FROM Ehdokkaat e WHERE e.ehdokasId = :Ehdos").setParameter("Ehdos", candidatee);
+	List<Ehdokkaat> kaikkiEhdokkaat = qE.getResultList();
+	Ehdokkaat one = kaikkiEhdokkaat.get(0);
+        %>
 
 <!DOCTYPE html>
 <html>
 <head>
-        <title>Adding Candidate</title>
-        <link href="style.css" rel="stylesheet" type="text/css">
-    </head>
-    <body>
-        <form method="POST">
-                <Strong>Update:</Strong><br>
-                Äänestysnumero:<br><input type="number" size ="3" name="user" value = "<%= one.getEhdokasId()%>"readonly/><br>
-                Etunimi:<br><input type="text" maxlength="200" size="70" name="etunimi" value = "<%= one.getEtunimi()%>"/><br>
-                Sukunimi:<br><input type="text" maxlength="200" size="70" name="sukunimi" value ="<%= one.getSukunimi()%>"/><br>
-                Puolue:<br><input type="text" maxlength="200" size="70" name="puolue" value = "<%= one.getPuolue()%>"/><br>
-                Kotipaikkakunta:<br><input type="text" maxlength="200" size="70" name="paikkakunta" value ="<%= one.getKotipaikkakunta()%>"/><br>
-                Ikä:<br><input type="text" maxlength="200" size="70" name="ika" value ="<%= one.getIka()%>"/><br>
-                Miksi eduskuntaan:<br><textarea rows="5" cols="60" name = "miksi"><%= one.getMiksiEduskuntaan()%></textarea><br>
-                Mitä asioita haluat edistää?:<br><textarea rows="5" cols="60" name = "mita"><%= one.getMitaAsioitaHaluatEdistaa()%></textarea><br>
-                Ammatti:<br><input type="text" maxlength="200" size="70" name="ammatti" value = "<%= one.getAmmatti()%>"/><br>
-                <input type="submit" name="update" value="update" /><button><a href="Admin.jsp">Cancel</a></button><br>
-                
-            </form><br>
-        <%
-        if (request.getParameter("Update") != null) {
-        	
-            
-        	try{
-        		String id = request.getParameter("user");
-        		
-        		int i = Integer.parseInt(id);
-        		
-        		String lastName = request.getParameter("etunimi");
-        		String firstName = request.getParameter("sukunimi");
-        		String party = request.getParameter("puolue");
-        		String from = request.getParameter("paikkakunta");
-        		String age = request.getParameter("ika");
-        		String why = request.getParameter("miksi");
-        		String what = request.getParameter("mita");
-        		String job = request.getParameter("ammatti");
-        		int a = Integer.parseInt(age);
-        		
-        		Ehdokkaat eh= em.find(Ehdokkaat.class, i);	
-        		if (one != null){
-        		em.getTransaction().begin();
-        		eh.setEtunimi(lastName);
-        		eh.setSukunimi(firstName);
-        		eh.setPuolue(party);
-        		eh.setKotipaikkakunta(from);
-        		eh.setIka(a);
-        		eh.setMiksiEduskuntaan(why);
-        		eh.setMitaAsioitaHaluatEdistaa(what);
-        		eh.setAmmatti(job);
-        		em.persist(one);
-        		em.flush();
-        		em.getTransaction().commit();
-        		em.close();
-                response.getWriter().print("Record Updated");
-        		}
-        		
-        		
-        		
-        	
-        	} catch(Exception er) {
-        	  	  	
-        	  	er.printStackTrace(response.getWriter());
-        	  	
-        	  	return;
-        	}
-        }
-        %>
-       
+<title>Adding Candidate</title>
+<link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+	<div class="editdiv">
+		<br>
+		<form class="edit" method="post">
+			<h2>Update:</h2>
+			<br> <input type="hidden" size="3" name="user"
+				value="<%= one.getEhdokasId()%>" /> Etunimi:<br>
+			<input type="text" maxlength="200" size="70" name="etunimi"
+				value="<%= one.getEtunimi()%>" /><br> Sukunimi:<br>
+			<input type="text" maxlength="200" size="70" name="sukunimi"
+				value="<%= one.getSukunimi()%>" /><br> Puolue:<br>
+			<input type="text" maxlength="200" size="70" name="puolue"
+				value="<%= one.getPuolue()%>" /><br> Kotipaikkakunta:<br>
+			<input type="text" maxlength="200" size="70" name="paikkakunta"
+				value="<%= one.getKotipaikkakunta()%>" /><br> Ikä:<br>
+			<input type="text" maxlength="200" size="70" name="ika"
+				value="<%= one.getIka()%>" /><br> Miksi eduskuntaan:<br>
+			<textarea rows="5" cols="60"> <%= one.getMiksiEduskuntaan()%></textarea>
+			<br> Mitä asioita haluat edistää?:<br>
+			<textarea rows="5" cols="60"><%= one.getMitaAsioitaHaluatEdistaa()%></textarea>
+			<br> Ammatti:<br>
+			<input type="text" maxlength="200" size="70" name="ammatti"
+				value="<%= one.getAmmatti()%>" /><br>
+			<%Integer limitCached = (Integer) session.getAttribute("limitCached");
+        		String paged = "";
+        		if(limitCached > 0){
+        			paged="?paged="+ limitCached;
+        		} %>
+			<input type="submit" name="update" value="update" /><a class="buton"
+				href="/Admin.jsp<%=paged%> ">Cancel</a><br>
+
+		</form>
+		<br>
+	</div>
+
 </body>
 </html>

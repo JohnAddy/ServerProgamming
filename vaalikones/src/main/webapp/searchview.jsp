@@ -1,4 +1,4 @@
-<%@ page import="java.util.*" %>
+<%@ page import="java.util.*"%>
 <%@page import="persist.Ehdokkaat"%>
 <%@page import="java.util.List"%>
 <%@page import="javax.persistence.Query"%>
@@ -14,25 +14,22 @@
 %>
 
 <%
-
-/* EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
+	/* EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
  EntityManager em = emf.createEntityManager();*/
 EntityManagerFactory emf = null;
 EntityManager em = null;
 String name = request.getParameter("pid");
-
 try {
 	emf = Persistence.createEntityManagerFactory("vaalikones");
 	em = emf.createEntityManager();
 } catch (Exception e) {
 	response.getWriter().println("EMF+EM EI Onnistu");
-
 	e.printStackTrace(response.getWriter());
-
 	return;
 }
-Query qE = em.createQuery("SELECT e FROM Ehdokkaat AS e WHERE e.etunimi='"+name+"' OR e.sukunimi='"+name+"'");
+Query qE = em.createQuery("SELECT e FROM Ehdokkaat AS e WHERE e.etunimi='" + name + "' OR e.sukunimi='" + name + "'");
 List<Ehdokkaat> ehdokasList = qE.getResultList();
+em.close();
 %>
 
 <!DOCTYPE html>
@@ -42,34 +39,53 @@ List<Ehdokkaat> ehdokasList = qE.getResultList();
 </head>
 <script type="text/javascript">
     <%if (error != null) {%>
-    var msg = "<%=error%>";
+    var msg = "<%=error%>
+	";
 	alert(msg);
 <%}%>
 	
 </script>
 <body>
 
-	<h3>
-		<a href="Create.jsp">Add & Delete Candidate</a>
-	</h3>
 
-	
+	<a href="Create.jsp" class="button">Add & Delete Candidate</a>
 
-	<p>List of Searched Candidate:</p>
 
+
+
+	<h1>List of Searched Candidate:</h1>
+	<%
+		Integer limitCached = (Integer) session.getAttribute("limitCached");
+	String paged = "";
+	if (limitCached > 0) {
+		paged = "?paged=" + limitCached;
+	}
+	%>
 	<form method="post" name="frm" action="searchview.jsp">
-      <table border="0" width="300" align="center">
-        <tr><td colspan=2 style="font-size:12pt;" align="center">
-        <h3>Search Candidate</h3></td></tr>
-        
-          <td><input  type="text" name="pid" id="pid" placeholder="Name">
-        </td></tr>        
-        <tr><td colspan=2 align="center">
-        <input  type="submit" name="submit" value="Search">        
-        <button><a href="Admin.jsp">Cancel</a></button></td></tr>
-      </table>
-    </form>
-		
+		<table border="0" width="300" align="center">
+			<tr>
+				<td colspan=2 style="font-size: 12pt;" align="center">
+					<h2>Search Candidate</h2>
+				</td>
+			</tr>
+
+			<td><input type="text" name="pid" id="pid" placeholder="Name">
+			</td>
+			</tr>
+			<tr>
+				<td colspan=2 align="center"><input type="submit" name="submit"
+					value="Search"> <a id="cancel" href="/Admin.jsp<%=paged%>">Cancel</a></td>
+
+			</tr>
+
+		</table>
+	</form>
+	<script>
+		function goBack() {
+			window.history.back();
+		}
+	</script>
+
 	<table>
 
 		<thead>
@@ -96,8 +112,8 @@ List<Ehdokkaat> ehdokasList = qE.getResultList();
 
 			<tr>
 
-				<td><a href="View.jsp?user=<%=one.getEhdokasId()%>">View</a> <a
-					href="Edit.jsp?user=<%=one.getEhdokasId()%>">Edit</a></td>
+				<td><a class="buton" href="View.jsp?user=<%=one.getEhdokasId()%>">View</a> 
+				<a class="buton" href="Edit.jsp?user=<%=one.getEhdokasId()%>">Edit</a></td>
 				<td><%=one.getEhdokasId()%></td>
 				<td><%=one.getEtunimi() + " " + one.getSukunimi()%></td>
 				<td><%=one.getPuolue()%></td>
@@ -114,5 +130,5 @@ List<Ehdokkaat> ehdokasList = qE.getResultList();
 		</tbody>
 	</table>
 
-    </body>
+</body>
 </html>

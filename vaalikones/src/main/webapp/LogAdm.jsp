@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 
-<% Object error = request.getAttribute("viesti");  %>
+<% Object error = request.getAttribute("messag");  %>
 
 <!DOCTYPE html>
 <html>
@@ -10,17 +10,11 @@
         <link href="style.css" rel="stylesheet" type="text/css">
     </head>
     <body>
-        <% //Tarkistetaan onko sessio voimassa
-            if (request.getParameter("logout") != null) {
-                        session.setAttribute("admin", null);
-            }
-        %>
-        
-
+     
             <img id="headerimg" src="Logo.png" width="720" />
            
 
-	<form id="vastausformi" action="CheckAdmin" method="POST">
+	<form id="CheckAdmin" action="CheckAdmin" method="POST">
 		<% if (error != null) {out.println(error);%>
 		</br>
 		<%} else {%>
