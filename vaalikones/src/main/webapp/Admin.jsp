@@ -106,21 +106,22 @@ em.close();
 			</td>
 			</tr>
 			<tr>
-				<td colspan=2 align="center"><input type="submit" name="submit" value="Search"></td>
+				<td colspan=2 align="center"><input type="submit" name="submit"
+					value="Search"></td>
 			</tr>
 
 		</table>
 		<br>
 	</form>
-	
+
 	<a href="Create.jsp" class="button">Add & Delete Candidate</a>
-	
+
 	<!----------------- LOGOUT SESSION ------------>
-	
-	<form action="Logout"> 
-		<input class="buton Logout" type="submit" value="Logout" name="Logout" />                 
-		</form>
-	
+
+	<form action="Logout">
+		<input class="buton Logout" type="submit" value="Logout" name="Logout" />
+	</form>
+
 	<table>
 		<thead>
 			<tr>
@@ -146,8 +147,9 @@ em.close();
 
 			<tr>
 
-				<td><a class="buton" href="View.jsp?user=<%=one.getEhdokasId()%>">View</a> 
-				<a class="buton" href="Edit.jsp?user=<%=one.getEhdokasId()%>">Edit</a></td>
+				<td><a class="buton"
+					href="View.jsp?user=<%=one.getEhdokasId()%>">View</a> <a
+					class="buton" href="Edit.jsp?user=<%=one.getEhdokasId()%>">Edit</a></td>
 				<td><%=one.getEhdokasId()%></td>
 				<td><%=one.getEtunimi() + " " + one.getSukunimi()%></td>
 				<td><%=one.getPuolue()%></td>
@@ -168,7 +170,7 @@ em.close();
 
 
 
-	<div class= "pagination">
+	<div class="pagination">
 
 		<%
 			if (limit > 1) {

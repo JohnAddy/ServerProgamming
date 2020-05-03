@@ -24,11 +24,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "VASTAUKSET")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Vastaukset.findAll", query = "SELECT v FROM Vastaukset v"),
+	
+	@NamedQuery(name = "Vastaukset.findAll", query = "SELECT v FROM Vastaukset v"),
     @NamedQuery(name = "Vastaukset.findByEhdokasId", query = "SELECT v FROM Vastaukset v WHERE v.vastauksetPK.ehdokasId = :ehdokasId"),
     @NamedQuery(name = "Vastaukset.findByKysymysId", query = "SELECT v FROM Vastaukset v WHERE v.vastauksetPK.kysymysId = :kysymysId"),
     @NamedQuery(name = "Vastaukset.findByVastaus", query = "SELECT v FROM Vastaukset v WHERE v.vastaus = :vastaus"),
+    @NamedQuery(name = "Vastaukset.findByUniqueID", query = "SELECT v FROM Vastaukset v WHERE v.vastauksetPK.ehdokasId = :ehdokasId AND v.vastauksetPK.kysymysId = :kysymysId"),
     @NamedQuery(name = "Vastaukset.findByKommentti", query = "SELECT v FROM Vastaukset v WHERE v.kommentti = :kommentti")})
+
 public class Vastaukset implements Serializable {
     private static final long serialVersionUID = 1L;
 

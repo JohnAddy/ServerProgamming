@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +15,11 @@ public class CheckAdmin extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
 
+	 public CheckAdmin() {
+	        super();
+	        // TODO Auto-generated constructor stub
+	    }
+
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
@@ -26,7 +30,7 @@ public class CheckAdmin extends HttpServlet {
 		final String Password = request.getParameter("Password");
 		final String User = request.getParameter("User");
 
-		if (crypt(Password).equals(crypt("admin")) && User.equals("admin")) {
+		if (crypt(Password).equals(crypt("login")) && User.equals("login")) {
 			HttpSession session = request.getSession();
 			session.setAttribute("login", "login");
 			session.setAttribute("limit-total", 0);

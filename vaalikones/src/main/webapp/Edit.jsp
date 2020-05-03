@@ -3,10 +3,10 @@
 <%@page import="javax.persistence.EntityManagerFactory"%>
 <%@page import="java.util.List"%>
 <%@page import="javax.persistence.Persistence"%>
-<%@page import ="javax.persistence.PersistenceContext"%>
+<%@page import="javax.persistence.PersistenceContext"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="persist.Ehdokkaat" %>
-<%@page import="javax.persistence.EntityTransaction" %>
+<%@page import="persist.Ehdokkaat"%>
+<%@page import="javax.persistence.EntityTransaction"%>
 <%@page session="true"%>
 <%
 
@@ -37,7 +37,7 @@ try {
 
 
 
- <%
+<%
             if (request.getParameter("update") != null) {
                 try {
                     //Retrieve the values set for the candidate from the text fields
@@ -77,12 +77,13 @@ try {
                      
                    
                      // e.setEhdokasId(candidatee);
-                      as.getTransaction().commit();
+                      as.persist(eh);
+                      as.flush();
+      				as.getTransaction().commit();
                       as.close();
                       
-                     
                    	}
-   
+                   	response.getWriter().print("Record Updated");
                    	session.setAttribute("limit-total", 0);
         			session.setAttribute("limitCached", 0);
                    // response.setHeader("Refresh", "0; http://localhost:8080/vaalikone/Edit.jsp");
@@ -99,36 +100,48 @@ try {
 	List<Ehdokkaat> kaikkiEhdokkaat = qE.getResultList();
 	Ehdokkaat one = kaikkiEhdokkaat.get(0);
         %>
-        
+
 <!DOCTYPE html>
 <html>
 <head>
-        <title>Adding Candidate</title>
-        <link href="style.css" rel="stylesheet" type="text/css">
-    </head>
-    <body>
-    
-    <div class= "editdiv"><br>
-        <form class="edit" method= "post">
-                <h2>Update:</h2><br>
-                <input type="hidden" size ="3" name="user" value = "<%= one.getEhdokasId()%>"/>
-                Etunimi:<br><input type="text" maxlength="200" size="70" name="etunimi" value ="<%= one.getEtunimi()%>"/><br>
-                Sukunimi:<br><input type="text" maxlength="200" size="70" name="sukunimi" value ="<%= one.getSukunimi()%>"/><br>
-                Puolue:<br><input type="text" maxlength="200" size="70" name="puolue" value ="<%= one.getPuolue()%>"/><br>
-                Kotipaikkakunta:<br><input type="text" maxlength="200" size="70" name="paikkakunta" value ="<%= one.getKotipaikkakunta()%>"/><br>
-                Ikä:<br><input type="text" maxlength="200" size="70" name="ika" value ="<%= one.getIka()%>"/><br>
-                Miksi eduskuntaan:<br><textarea rows="5" cols="60"> <%= one.getMiksiEduskuntaan()%></textarea><br>
-                Mitä asioita haluat edistää?:<br><textarea rows="5" cols="60"><%= one.getMitaAsioitaHaluatEdistaa()%></textarea><br>
-                Ammatti:<br><input type="text" maxlength="200" size="70" name="ammatti" value ="<%= one.getAmmatti()%>"/><br>
-                <%Integer limitCached = (Integer) session.getAttribute("limitCached");
+<title>Adding Candidate</title>
+<link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+	<div class="editdiv">
+		<br>
+		<form class="edit" method="post">
+			<h2>Update:</h2>
+			<br> <input type="hidden" size="3" name="user"
+				value="<%= one.getEhdokasId()%>" /> Etunimi:<br>
+			<input type="text" maxlength="200" size="70" name="etunimi"
+				value="<%= one.getEtunimi()%>" /><br> Sukunimi:<br>
+			<input type="text" maxlength="200" size="70" name="sukunimi"
+				value="<%= one.getSukunimi()%>" /><br> Puolue:<br>
+			<input type="text" maxlength="200" size="70" name="puolue"
+				value="<%= one.getPuolue()%>" /><br> Kotipaikkakunta:<br>
+			<input type="text" maxlength="200" size="70" name="paikkakunta"
+				value="<%= one.getKotipaikkakunta()%>" /><br> Ikä:<br>
+			<input type="text" maxlength="200" size="70" name="ika"
+				value="<%= one.getIka()%>" /><br> Miksi eduskuntaan:<br>
+			<textarea rows="5" cols="60"> <%= one.getMiksiEduskuntaan()%></textarea>
+			<br> Mitä asioita haluat edistää?:<br>
+			<textarea rows="5" cols="60"><%= one.getMitaAsioitaHaluatEdistaa()%></textarea>
+			<br> Ammatti:<br>
+			<input type="text" maxlength="200" size="70" name="ammatti"
+				value="<%= one.getAmmatti()%>" /><br>
+			<%Integer limitCached = (Integer) session.getAttribute("limitCached");
         		String paged = "";
         		if(limitCached > 0){
         			paged="?paged="+ limitCached;
         		} %>
-                <input type="submit" name="update" value="update" /><a class= "buton" href="/Admin.jsp<%=paged%> ">Cancel</a><br>
+			<input type="submit" name="update" value="update" /><a class="buton"
+				href="/Admin.jsp<%=paged%> ">Cancel</a><br>
 
-            </form><br>
-</div>
+		</form>
+		<br>
+	</div>
 
 </body>
 </html>

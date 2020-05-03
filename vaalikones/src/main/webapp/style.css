@@ -145,11 +145,12 @@ a.button {
 }
 
 .button {
-	left: 1400px;
-	bottom: 82px;
-	padding: 10px;
-	position: relative;
+    left: 1110px;
+    bottom: 82px;
+    padding: 10px;
+    position: relative;
 }
+
 
 #cancel {
 	left: 30px;
@@ -232,7 +233,7 @@ span {
 }
 
 .Logout {
-	position: relative;
-	left: 1535px;
-	transform: translateY(-50%);
+    position: relative;
+    left: 1235px;
+    transform: translateY(-50%);
 }
