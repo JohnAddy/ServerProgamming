@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+
+
+<form id = "form2">
+name: <input type ='text' name='name' value='' placeholder='name here'><br>
+Pages:<input type ='text' name='pages' value='' placeholder= 'pages here'><br>
+<input type='button' name='ok' value='Send' onclick='sendData(this.form);'><br>
+<input type='button' name='ok' value='Get One' onclick='getData1();'><br>
+</form> 
+
+
+
+//:::::::::::::::::::::GetOne::::::::::::::::::::::::::::::::
+
+<p id='response'>
+Get one book here!
+</p>
+
+<p id='oneresult'>
+Get one book here!
+</p>
+
+//:::::::::::::::::::::END of GetOne::::::::::::::::::::::::::::::::
+
+<p id='result2'>
+Result 2 comes here!
+</p>
+
+
+
+
+//::::::::::::::::::::Beginning:GetOne::::::::::::::::::::::::::::::::
+<script>
+ function sendData(form) {
+var book={ name: form.name.value, pages:form.pages.value };
+
+if (book.name === null || book.pages === null){
+	return;
+	
+}
+//laptop.weight=form.weight.value;
+
+var json=JSON.stringify(book);
+//var json=JSON.stringify({data:book});
+   
+
+var xhttp = new XMLHttpRequest();
+xhttp.onreadystatechange = function() {
+  if (this.readyState == 4 && this.status == 200) {
+   document.getElementById("response").innerHTML = this.responseText;
+  }
+};
+xhttp.open("POST", "/rest/bookservice/addonebook", true);
+//xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+xhttp.setRequestHeader("Content-type", "application/json");
+
+//xhttp.send(jsonBook);
+xhttp.send(json);
+
+
+}
+
+function getData1(){
+xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange = function() {
+  if (this.readyState == 4 && this.status == 200) {
+    //Ensin result-kenttään JSON sellaisenaan
+    var tulos=this.responseText;
+    document.getElementById("oneresult").innerHTML = tulos;
+    //Sitten puretaan se Javascript oliotaulukoksi
+     booklist = JSON.parse(tulos);
+    var txt="";
+    //Käydään taulukko läpi yksi kerrallaan ja liitetään
+    //muuttujaan txt kunkin yksittäisen olion arvot
+    for (index in booklist){
+          txt += booklist[index].name + "<br>";
+         txt += booklist[index].pages + "<br>";
+
+   
+    //Lisätään saatu merkkijono kenttään result2
+     //document.getElementById("result2").innerHTML = txt;
+   }
+};
+xmlhttp.open("GET", "/rest/bookservice/addonebook", true);
+xmlhttp.send();   
+} 
+}
+
+//:::::::::::::::::::END OF GETONE:::::::::::::::::::::::::::::::::::::::::: 
+
+</script>
+</body>
+</html>
+
