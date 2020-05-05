@@ -18,7 +18,9 @@ if (user == null) {
 <link href="style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+<div>
 
+</div>
 
 </body>
 </html>
